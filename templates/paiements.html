@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Paiements - Askely Express</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 40px; }
+        h1 { color: #333; }
+        table { border-collapse: collapse; width: 100%; background: #fff; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: center; }
+        th { background-color: #444; color: #fff; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>🧾 Dashboard des Paiements</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Montant</th>
+                <th>Expéditeur</th>
+                <th>Récepteur</th>
+                <th>Statut</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for paiement in paiements %}
+            <tr>
+                <td>{{ paiement[0] }}</td>
+                <td>{{ paiement[1] }} XOF</td>
+                <td>{{ paiement[2] }}</td>
+                <td>{{ paiement[3] }}</td>
+                <td>{{ paiement[4] }}</td>
+                <td>{{ paiement[5] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
