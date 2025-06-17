@@ -35,13 +35,29 @@ def whatsapp_webhook():
     msg = resp.message()
 
     if "bonjour" in incoming_msg:
-        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Souhaitez-vous envoyer un colis 📦 ou devenir transporteur 🚚 ?")
+        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
+1️⃣ Envoyer un colis
+2️⃣ Devenir transporteur
+3️⃣ Suivre un colis")
+    elif "1" in incoming_msg or "envoyer" in incoming_msg:
+        msg.body("✈️ Très bien ! Veuillez nous envoyer les détails du colis :
+- Ville de départ
+- Ville d'arrivée
+- Poids estimé
+- Numéro de téléphone")
+    elif "2" in incoming_msg or "transporteur" in incoming_msg:
+        msg.body("🚚 Super ! Pour devenir transporteur, veuillez envoyer :
+- Vos destinations régulières
+- Votre numéro WhatsApp
+- Une pièce d'identité en photo")
+    elif "3" in incoming_msg or "suivre" in incoming_msg:
+        msg.body("🔍 Entrez le numéro de suivi du colis (si vous en avez un).")
     else:
-        msg.body("🤖 Je n'ai pas compris. Répondez par 'Bonjour' pour commencer.")
+        msg.body("🤖 Je n'ai pas compris. Répondez par 'Bonjour' pour afficher le menu.")
 
     return str(resp)
 
-# Poster un colis (exemple de formulaire backend)
+# Poster un colis
 @app.route('/poster_colis', methods=['POST'])
 def poster_colis():
     data = request.get_json()
@@ -72,7 +88,7 @@ def voir_paiements():
     conn.close()
     return render_template('paiements.html', paiements=paiements)
 
-# Création automatique de la base de données au démarrage
+# Création automatique de la base de données
 def init_db():
     conn = sqlite3.connect('paiements.db')
     c = conn.cursor()
