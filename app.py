@@ -36,13 +36,18 @@ def whatsapp_webhook():
     msg = resp.message()
 
     if "bonjour" in incoming_msg:
-        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :\n1. Envoyer un colis\n2. Devenir transporteur\n3. Suivre un colis")\n1. Envoyer un colis\n2. Devenir transporteur\n3. Suivre un colis"))
+        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
+1. Envoyer un colis
+2. Devenir transporteur
+3. Suivre un colis")
 1. Envoyer un colis
 2. Devenir transporteur
 3. Suivre un colis")
     elif "1" in incoming_msg or "envoyer" in incoming_msg:
-        msg.body("[COLIS] Très bien ! Veuillez répondre en une seule ligne au format suivant :
-Ville départ - Ville arrivée - Poids(kg) - Téléphone
+        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
+1. Envoyer un colis
+2. Devenir transporteur
+3. Suivre un colis") - Téléphone
 
 Exemple : Casa - Dakar - 5 - +212600000000")
     elif re.match(r"^[a-zA-Zéèàçù\s]+ - [a-zA-Zéèàçù\s]+ - \d+ - \+?\d+$", incoming_msg.strip()):
@@ -61,23 +66,30 @@ Exemple : Casa - Dakar - 5 - +212600000000")
             conn.commit()
             conn.close()
 
-            msg.body(f"[OK] Colis enregistré !
-[TRANSPORTEUR] {depart} → {arrivee}
-Colis : {poids} kg
-Téléphone : {tel}
-Prix : {montant} MAD à payer")
+            msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
+1. Envoyer un colis
+2. Devenir transporteur
+3. Suivre un colis")
         except:
-            msg.body("[ERREUR] Format invalide. Réessayez comme :
-Casa - Dakar - 5 - +212600000000")
+            msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
+1. Envoyer un colis
+2. Devenir transporteur
+3. Suivre un colis")
     elif "2" in incoming_msg or "transporteur" in incoming_msg:
-        msg.body("[TRANSPORTEUR] Pour devenir transporteur, envoyez :
-- Vos destinations
-- Numéro WhatsApp
-- Une pièce d'identité")
+        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
+1. Envoyer un colis
+2. Devenir transporteur
+3. Suivre un colis")
     elif "3" in incoming_msg or "suivre" in incoming_msg:
-        msg.body("[SUIVI] Entrez le numéro de suivi du colis (si vous en avez un).")
+        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
+1. Envoyer un colis
+2. Devenir transporteur
+3. Suivre un colis").")
     else:
-        msg.body("[BOT] Je n'ai pas compris. Répondez par 'Bonjour' pour afficher le menu.")
+        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
+1. Envoyer un colis
+2. Devenir transporteur
+3. Suivre un colis")
 
     return str(resp)
 
