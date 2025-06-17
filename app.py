@@ -80,7 +80,8 @@ def check_auth(username, password):
 
 def authenticate():
     return Response(
-        '⚠️ Accès refusé. Veuillez vous authentifier.'', 401,
+        '⚠️ Accès refusé.
+Veuillez vous authentifier.', 401,
         {'WWW-Authenticate': 'Basic realm="Askely Admin"'})
 
 def requires_auth(f):
