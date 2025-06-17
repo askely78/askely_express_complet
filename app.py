@@ -197,3 +197,23 @@ def assigner_transporteur():
 
     conn.close()
     return jsonify({"message": "Transporteur assigné au colis"}), 200
+from flask import request
+from twilio.twiml.messaging_response import MessagingResponse
+
+@app.route("/webhook/whatsapp", methods=["POST"])
+def whatsapp_webhook():
+    incoming_msg = request.form.get('Body', '').lower()
+    from_number = request.form.get('From')
+
+    print(f"📩 Message reçu de {from_number}: {incoming_msg}")
+
+    # Créer une réponse simple
+    resp = MessagingResponse()
+    msg = resp.message()
+
+    if "bonjour" in incoming_msg:
+        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Veux-tu envoyer un colis ou devenir transporteur ?")
+    else:
+        msg.body("🤖 Je n'ai pas compris. Envoie 'Bonjour' pour commencer.")
+
+    return str(resp)
