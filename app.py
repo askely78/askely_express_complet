@@ -47,9 +47,7 @@ def whatsapp_webhook():
         msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
 1. Envoyer un colis
 2. Devenir transporteur
-3. Suivre un colis") - Téléphone
-
-Exemple : Casa - Dakar - 5 - +212600000000")
+3. Suivre un colis")
     elif re.match(r"^[a-zA-Zéèàçù\s]+ - [a-zA-Zéèàçù\s]+ - \d+ - \+?\d+$", incoming_msg.strip()):
         try:
             parts = incoming_msg.strip().split(" - ")
@@ -66,10 +64,11 @@ Exemple : Casa - Dakar - 5 - +212600000000")
             conn.commit()
             conn.close()
 
-            msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
-1. Envoyer un colis
-2. Devenir transporteur
-3. Suivre un colis")
+            msg.body(f"[OK] Colis enregistré !
+[TRANSPORTEUR] {depart} → {arrivee}
+Colis : {poids} kg
+Téléphone : {tel}
+Prix : {montant} MAD à payer")
         except:
             msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
 1. Envoyer un colis
@@ -84,7 +83,7 @@ Exemple : Casa - Dakar - 5 - +212600000000")
         msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
 1. Envoyer un colis
 2. Devenir transporteur
-3. Suivre un colis").")
+3. Suivre un colis")
     else:
         msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :
 1. Envoyer un colis
