@@ -4,6 +4,7 @@ from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import datetime
+import re
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -40,42 +41,45 @@ def whatsapp_webhook():
 2️⃣ Devenir transporteur
 3️⃣ Suivre un colis")
     elif "1" in incoming_msg or "envoyer" in incoming_msg:
-        msg.body("✈️ Très bien ! Veuillez nous envoyer les détails du colis :
-- Ville de départ
-- Ville d'arrivée
-- Poids estimé
-- Numéro de téléphone")
+        msg.body("✈️ Très bien ! Veuillez répondre en une seule ligne au format suivant :
+Ville départ - Ville arrivée - Poids(kg) - Téléphone
+
+Exemple : Casa - Dakar - 5 - +212600000000")
+    elif re.match(r"^[a-zA-Zéèàçù\s]+ - [a-zA-Zéèàçù\s]+ - \d+ - \+?\d+$", incoming_msg.strip()):
+        try:
+            parts = incoming_msg.strip().split(" - ")
+            depart = parts[0].strip().capitalize()
+            arrivee = parts[1].strip().capitalize()
+            poids = float(parts[2].strip())
+            tel = parts[3].strip()
+            montant = round(poids * 10, 2)  # ex: 10 MAD/kg
+
+            conn = sqlite3.connect('paiements.db')
+            c = conn.cursor()
+            c.execute("INSERT INTO paiements (nom_client, tel_client, ville_depart, ville_arrivee, poids_kg, prix_total, date) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+                      ("Client WhatsApp", tel, depart, arrivee, poids, montant, datetime.datetime.now()))
+            conn.commit()
+            conn.close()
+
+            msg.body(f"✅ Colis enregistré !
+🚚 {depart} → {arrivee}
+📦 {poids} kg
+📞 {tel}
+💰 {montant} MAD à payer")
+        except:
+            msg.body("❌ Format invalide. Réessayez comme :
+Casa - Dakar - 5 - +212600000000")
     elif "2" in incoming_msg or "transporteur" in incoming_msg:
-        msg.body("🚚 Super ! Pour devenir transporteur, veuillez envoyer :
-- Vos destinations régulières
-- Votre numéro WhatsApp
-- Une pièce d'identité en photo")
+        msg.body("🚚 Pour devenir transporteur, envoyez :
+- Vos destinations
+- Numéro WhatsApp
+- Une pièce d'identité")
     elif "3" in incoming_msg or "suivre" in incoming_msg:
         msg.body("🔍 Entrez le numéro de suivi du colis (si vous en avez un).")
     else:
         msg.body("🤖 Je n'ai pas compris. Répondez par 'Bonjour' pour afficher le menu.")
 
     return str(resp)
-
-# Poster un colis
-@app.route('/poster_colis', methods=['POST'])
-def poster_colis():
-    data = request.get_json()
-    nom = data.get('nom_client')
-    tel = data.get('tel_client')
-    depart = data.get('ville_depart')
-    arrivee = data.get('ville_arrivee')
-    poids = data.get('poids_kg')
-    montant = data.get('prix_total')
-
-    conn = sqlite3.connect('paiements.db')
-    c = conn.cursor()
-    c.execute("INSERT INTO paiements (nom_client, tel_client, ville_depart, ville_arrivee, poids_kg, prix_total, date) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-              (nom, tel, depart, arrivee, poids, montant, datetime.datetime.now()))
-    conn.commit()
-    conn.close()
-
-    return {"status": "success", "message": "Colis enregistré"}
 
 # Dashboard admin
 @app.route('/admin/paiements')
