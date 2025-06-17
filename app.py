@@ -36,7 +36,7 @@ def whatsapp_webhook():
     msg = resp.message()
 
     if "bonjour" in incoming_msg:
-        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :\n1. Envoyer un colis\n2. Devenir transporteur\n3. Suivre un colis")
+        msg.body("👋 Bonjour ! Bienvenue chez Askely Express. Répondez par :\n1. Envoyer un colis\n2. Devenir transporteur\n3. Suivre un colis")\n1. Envoyer un colis\n2. Devenir transporteur\n3. Suivre un colis"))
 1. Envoyer un colis
 2. Devenir transporteur
 3. Suivre un colis")
